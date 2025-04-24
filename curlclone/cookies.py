@@ -5,12 +5,13 @@ COOKIE_FILE = "cookies.txt"
 
 # Simple in-memory cookie storage {domain: {path: {name: value}}}
 # More robust implementation would handle expires, secure, HttpOnly etc.
-cookie_jar = {}
+cookie_jar: dict[str, dict[str, str]] = {}
 
-def load_cookies_from_file():
+def load_cookies_from_file() -> None:
     """Loads cookies from the COOKIE_FILE into the global cookie_jar."""
     global cookie_jar
-    cookie_jar = {}
+    cookie_jar: dict[str, dict[str, str]] = {}
+
     if not os.path.exists(COOKIE_FILE):
         return
     try:
@@ -29,7 +30,7 @@ def load_cookies_from_file():
     except IOError as e:
         print(f"Warning: Could not read cookie file {COOKIE_FILE}: {e}", file=sys.stderr)
 
-def save_cookies_to_file():
+def save_cookies_to_file() -> None:
     """Saves the global cookie_jar to the COOKIE_FILE."""
     try:
         with open(COOKIE_FILE, 'w', encoding='utf-8') as f:
@@ -41,7 +42,10 @@ def save_cookies_to_file():
     except IOError as e:
         print(f"Warning: Could not write cookie file {COOKIE_FILE}: {e}", file=sys.stderr)
 
-def get_cookies_for_url(host, path):
+def get_cookies_for_url(
+        host: str
+    ) -> str:
+    
     """Retrieves applicable cookies from the jar for a given host and path."""
     cookies_to_send = {}
     for domain, names in cookie_jar.items():
@@ -50,7 +54,10 @@ def get_cookies_for_url(host, path):
             cookies_to_send.update(names)
     return '; '.join([f"{name}={value}" for name, value in cookies_to_send.items()])
 
-def store_cookies(set_cookie_headers, default_domain):
+def store_cookies(
+        set_cookie_headers: list[str] | str, 
+        default_domain: str
+    ) -> None:
     """Parses Set-Cookie headers, stores them in the jar, and saves to file."""
     if not isinstance(set_cookie_headers, list):
         set_cookie_headers = [set_cookie_headers]
