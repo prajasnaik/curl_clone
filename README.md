@@ -14,6 +14,9 @@ A very basic Python script mimicking some functionalities of curl using standard
 ## Installation
 
 1.  Clone or download this script.
+```bash
+git clone https://github.com/prajasnaik/curl_clone/
+```
 2.  No external libraries needed (uses only Python standard library).
 
 ## Usage
@@ -29,6 +32,7 @@ python basic_curl.py <URL> [options]
 *   `-L`: Follow redirects (default).
 *   `--no-location`: Do not follow redirects.
 *   `-v`: Verbose output.
+*   `-H` : Manually give a few headers
 
 **Examples:**
 
